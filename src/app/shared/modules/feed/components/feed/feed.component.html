@@ -1,0 +1,29 @@
+<mc-is-loading *ngIf="isLoading$ | async"></mc-is-loading>
+<mc-error-message *ngIf="error$ | async"></mc-error-message>
+<div *ngIf="(feed$ | async)?.articles as articles">
+  <div class="list-group" *ngFor="let article of articles">
+    <div class="list-group-item">
+      <a [routerLink]="['/profiles', article.author.username]">
+        <img [src]="article.author.image" />
+      </a>
+      <div class="info">
+        <a [routerLink]="['/profiles', article.author.username]">
+          {{ article.author.username }}
+        </a>
+        <span class="date">{{ article.createdAt | date }}</span>
+      </div>
+      <div class="pull-xs-right">Add to favotites</div>
+    </div>
+    <a [routerLink]="['/articles', article.slug]" class="preview-link">
+      <h1>{{ article.title }}</h1>
+      <p>{{ article.description }}</p>
+      <mc-tag-list [tags]="article.tagList"></mc-tag-list>
+    </a>
+  </div>
+  <mc-pagination
+    [total]="(feed$ | async)?.articlesCount"
+    [limit]="limit"
+    [url]="baseUrl"
+    [currentPage]="currentPage"
+  ></mc-pagination>
+</div>
